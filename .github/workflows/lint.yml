@@ -1,0 +1,32 @@
+name: "Lint"
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  pull-requests: write
+  id-token: write
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.TEST_PAT }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: v18.x
+          cache: 'npm'
+
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm run lint

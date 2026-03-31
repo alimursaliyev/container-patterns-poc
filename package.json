@@ -1,0 +1,8 @@
+{
+  "name": "container-patterns-poc",
+  "version": "1.0.0",
+  "scripts": {
+    "lint": "echo 'lint passed'",
+    "build": "echo 'build passed'"
+  }
+}
